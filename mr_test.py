@@ -94,19 +94,28 @@ def discrete_logarithm(a, g, p, timeout=60):
     return x, end_time - start_time
 
 # Exemplo de uso
-N = int(input("Digite um número inteiro N: "))
-a = int(input("Digite um número inteiro a: "))
-p = next_prime(N)
-print(f"O menor primo p > {N} é {p}. O teste de Miller-Rabin foi executado {contador} vezes.")
+def main():
+    N = int(input("Digite um número inteiro N (N > 0): "))
+    a = int(input("Digite um número inteiro a (a > 0): "))
 
-g, order = find_generator(p)
-if order == p - 1:
-    print(f"Um gerador de Z{p}*: {g}, com ordem mínima estimada: {order}")
-else:
-    print(f"Um elemento com ordem alta em Z{p}*: {g}, com ordem mínima estimada: {order}")
+    if N <= 0 or a <= 0:
+        print("Ambos os números devem ser maiores que 0.")
+        return
 
-try:
-    result, time_taken = discrete_logarithm(a, g, p)
-    print(f"O logaritmo discreto de {a} módulo {p} na base {g} é {result}. Tempo de cálculo: {time_taken:.6f} segundos.")
-except TimeoutError as e:
-    print(e)
+    p = next_prime(N)
+    print(f"O menor primo p > {N} é {p}. O teste de Miller-Rabin foi executado {contador} vezes.")
+
+    g, order = find_generator(p)
+    if order == p - 1:
+        print(f"Um gerador de Z{p}*: {g}, com ordem mínima estimada: {order}")
+    else:
+        print(f"Um elemento com ordem alta em Z{p}*: {g}, com ordem mínima estimada: {order}")
+
+    try:
+        result, time_taken = discrete_logarithm(a, g, p)
+        print(f"O logaritmo discreto de {a} módulo {p} na base {g} é {result}. Tempo de cálculo: {time_taken:.6f} segundos.")
+    except TimeoutError as e:
+        print(e)
+
+if __name__ == "__main__":
+    main()
