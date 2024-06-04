@@ -2,11 +2,12 @@ import random
 import sympy
 import time
 
+# Inicializa o contador global
 contador = 0
 
+# Lista de números primos pequenos para otimização
 PRIMOS_PEQUENOS = [
-    2, 3, 5, 7,
-    11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97,
+    2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97,
     101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199,
     211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293,
     307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397,
@@ -20,14 +21,17 @@ PRIMOS_PEQUENOS = [
 
 def is_prime(n, k=5):
     global contador
-    contador += 1
+    contador += 1  # Incrementa o contador a cada execução
 
+    # Verificações rápidas para números pequenos e casos triviais
     if n in PRIMOS_PEQUENOS:
         return True
     if n <= 1:
         return False
     if n % 2 == 0:
         return False
+
+    # Testa a divisibilidade por primos pequenos
     for prime in PRIMOS_PEQUENOS:
         if prime * prime > n:
             break
@@ -41,7 +45,7 @@ def is_prime(n, k=5):
         r += 1
         d //= 2
 
-    # Executa o teste k vezes
+    # Executa o teste de Miller-Rabin k vezes
     for _ in range(k):
         a = random.randint(2, n - 2)
         x = pow(a, d, n)
@@ -101,15 +105,15 @@ def find_generator(p):
     return g, order
 
 def discrete_logarithm(a, g, p, timeout=60):
-    start_time = time.time()
+    start_time = time.time()  # Marca o início do cálculo
 
     x = 0
     while pow(g, x, p) != a:
         x += 1
         if time.time() - start_time > timeout:
-            raise TimeoutError("Tempo limite excedido.")
+            raise TimeoutError("Tempo limite excedido.")  # Lança exceção se o tempo limite for excedido
 
-    end_time = time.time()
+    end_time = time.time()  # Marca o final do cálculo
     return x, end_time - start_time
 
 # Exemplo de uso
